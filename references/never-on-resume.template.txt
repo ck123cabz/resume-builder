@@ -1,0 +1,7 @@
+# One term per line, matched case-insensitively as a whole word or phrase.
+# [leak] exposes an employer; [claim] is a claim the person cannot defend.
+# Add a line whenever a session cuts something. Lines starting with # are ignored.
+# Examples of the format (remove the leading "# " to activate):
+# [leak] Example Client Name
+# [leak] internal-tool-name
+# [claim] doubled revenue in one quarter

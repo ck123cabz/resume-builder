@@ -1,0 +1,104 @@
+/* Print styling for resume markdown. One concern: how a resume looks on paper.
+   ATS-safe by construction: single column, real text, standard headings, no
+   graphics, no multi-column tricks, contact details in the body.
+   Colors: warm near-black ink on white paper. */
+
+@page { size: Letter; margin: 0.42in 0.48in; }
+
+:root {
+  --ink:      #1c1a17;
+  --body:     #363229;
+  --muted:    #6e675a;
+  --rule:     #d9d3c4;
+  --accent:   #8e500e;
+  /* Spacing. A resume that must hold one page overrides these in a <style>
+     block at the end of its own markdown (any `<style>` block placed after the content). */
+  --gap-section: 11pt;
+  --gap-role:    7.5pt;
+  --gap-head:    8pt;
+  --head-rule:   1.4pt;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8.8pt;
+  line-height: 1.26;
+  color: var(--body);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Name */
+h1 {
+  font-size: 20pt;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 4pt;
+}
+
+/* Contact line sits directly under the name, in the body where parsers read it */
+h1 + p {
+  font-size: 8.6pt;
+  color: var(--muted);
+  margin: 0 0 var(--gap-head);
+  padding-bottom: var(--gap-head);
+  border-bottom: var(--head-rule) solid var(--ink);
+  line-height: 1.4;
+}
+
+/* Section headings */
+h2 {
+  font-size: 8.4pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin: var(--gap-section) 0 5pt;
+  padding-bottom: 3pt;
+  border-bottom: 0.8pt solid var(--rule);
+  break-after: avoid;
+}
+h2:first-of-type { margin-top: 0; }
+
+/* Role header: title, org and dates inline, in reading order. A right-aligned
+   date column broke text extraction, so dates follow the org on the same line. */
+.role {
+  margin: var(--gap-role) 0 1pt;
+  break-inside: avoid;
+  break-after: avoid;
+}
+.role-title { font-weight: 700; font-size: 9.8pt; color: var(--ink); }
+/* Company and place sit beside the title in regular weight, so the title leads */
+.role-org { font-size: 9.4pt; color: var(--body); }
+.role-sep { color: var(--muted); }
+.role-dates {
+  font-size: 8.3pt;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Italic context line under a role */
+.role + p em, p > em:only-child { color: var(--muted); }
+.role + p { margin: 0 0 2pt; break-after: avoid; }
+
+/* A section's own list (education, awards, tools) stays whole under its heading */
+h2 + ul { break-inside: avoid; }
+
+/* A role's bullets stay on one page with its header */
+.role + p + ul, .role + ul { break-inside: avoid; }
+
+ul { margin: 1.5pt 0 0; padding-left: 11pt; }
+li { margin: 0 0 1.35pt; padding-left: 1pt; break-inside: avoid; }
+li::marker { color: var(--muted); }
+
+p { margin: 0 0 3pt; }
+strong { font-weight: 700; color: var(--ink); }
+
+/* Skills / tools lines read as label + list, set tighter than body copy */
+.kv p { font-size: 8.6pt; line-height: 1.28; margin-bottom: 1.5pt; }
+
+a { color: inherit; text-decoration: none; }

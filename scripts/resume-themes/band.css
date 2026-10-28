@@ -1,0 +1,8 @@
+/* Band: name and contact on a dark teal header band, teal section headings. Text stays real text. */
+:root { --ink: #10302f; --body: #2c3534; --muted: #5f6b6a; --rule: #cfdcda; --accent: #1d6b66; }
+body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+h1, h1 + p { background: #173f3c; color: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+h1 { margin: 0; padding: 10pt 12pt 2pt; }
+h1 + p { color: #d6ebe8; padding: 0 12pt 9pt; border-bottom: none; margin-bottom: 10pt; }
+h2 { color: var(--accent); border-bottom: 1pt solid var(--accent); }
+li::marker { color: var(--accent); }

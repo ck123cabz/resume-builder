@@ -1,0 +1,10 @@
+/* Navy: clean sans with one navy accent and a left bar on section headings. */
+:root { --ink: #14213d; --body: #2b2f36; --muted: #5d6573; --rule: #c9d1de; --accent: #1f3a68; }
+body { font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 8.7pt; }
+h1 { color: var(--accent); font-weight: 700; letter-spacing: -0.01em; }
+h1 + p { border-bottom: 2.4pt solid var(--accent); }
+h2 { color: var(--accent); border-bottom: none; border-left: 3pt solid var(--accent);
+     padding: 1pt 0 1pt 6pt; background: #eef2f8; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.role-title { color: var(--ink); }
+.role-dates { color: var(--accent); font-weight: 600; }
+li::marker { color: var(--accent); }

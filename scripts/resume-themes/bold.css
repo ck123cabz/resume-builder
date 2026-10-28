@@ -1,0 +1,16 @@
+/* Bold: editorial. A big name with a lime highlighter stroke, short heavy rules under headings. */
+:root { --ink: #0a0a0a; --body: #2a2a2a; --muted: #6a6a6a; --rule: #0a0a0a; --accent: #0a0a0a;
+        --mark: #d7f75b; --gap-section: 11pt; }
+body { font-family: "Avenir Next", "Helvetica Neue", sans-serif; font-size: 8.6pt; line-height: 1.28; }
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+h1 { display: inline-block; font-family: Futura, "Avenir Next", sans-serif; font-size: 27pt; font-weight: 700;
+     letter-spacing: -0.01em; background: linear-gradient(transparent 58%, var(--mark) 58%, var(--mark) 92%, transparent 92%);
+     padding: 0 3pt; margin-left: -3pt; }
+h1 + p { border-bottom: 2.4pt solid var(--ink); font-weight: 500; color: var(--body); }
+h2 { font-family: Futura, "Avenir Next", sans-serif; font-size: 10pt; letter-spacing: 0.04em; color: var(--ink);
+     border-bottom: none; padding-bottom: 4pt;
+     background: linear-gradient(var(--ink), var(--ink)) left bottom / 26pt 2.6pt no-repeat; }
+.role-title { font-weight: 700; }
+.role-dates { font-weight: 600; color: var(--ink); background: var(--mark); padding: 0 3pt; }
+.role + p em, p > em:only-child { color: var(--muted); }
+li::marker { color: var(--ink); }

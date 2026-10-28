@@ -1,0 +1,362 @@
+{
+  "_comment": "ai-slop-lint: ignore-file. Data for scripts/ai_slop_lint.py. Tier 1 is banned outright; tier 2 is capped by density. Source for the vocabulary: r/ClaudeAI 'Favorite Claudeisms, in no particular order' (197 comments), saved by the author to 01-inbox/ai-writing-skill.md on 2026-07-23. Design: docs/superpowers/specs/2026-07-28-ai-slop-filter-design.md. v2 (certainty, coined_names, headings, rather than / instead of): docs/superpowers/specs/2026-09-07-ai-slop-linter-v2-design.md. v3 (shared, jobs, banned_devices, six rhetoric hints): docs/superpowers/specs/2026-09-18-artifact-copy-gate-design.md. jobs holds one block per copy job and nothing else, so it can be iterated: caps are word counts per element kind, off lists the hit labels that job drops (Persuade drops closing-beat, the author's decision 10 on 9/18), and em-dash there also switches off the over-cap pass, which makes no hit. rhetoric holds one id and its pattern per entry, nothing else, so it can be iterated: Hints the carrier test gates, applied per sentence in rhetoric.py rather than per line. Antithesis moved here on 9/18: the plain regex read \"Rai is his son, not his daughter\" and \"a clean open, not a verdict\" the same way, and the first is a correction that names a person. A sentence carrying a name, a time, a number or a quote keeps its X-not-Y. Adding a phrase is a data edit; do not move phrases into the linter.",
+  "version": 3,
+
+  "tier1": {
+    "_note": "Banned outright. Match is case-insensitive, whole-phrase, word-boundary anchored.",
+    "phrases": [
+      "load-bearing",
+      "load bearing",
+      "smoking gun",
+      "blast radius",
+      "footgun",
+      "belt-and-suspenders",
+      "belt and suspenders",
+      "belt-and-braces",
+      "belt and braces",
+      "defense-in-depth",
+      "defence-in-depth",
+      "you're absolutely right",
+      "you are absolutely right",
+      "good catch",
+      "sharp catch",
+      "nice catch",
+      "sanity check",
+      "let me be honest",
+      "i need to be honest",
+      "i'm going to be honest",
+      "i am going to be honest",
+      "to be honest with you",
+      "one honest caveat",
+      "one honest limitation",
+      "genuine caveat",
+      "real caveat",
+      "and honestly?",
+      "just say the word",
+      "say the word and",
+      "that's not nothing",
+      "that is not nothing",
+      "sit with it",
+      "sit with that",
+      "stay with it",
+      "doing the heavy lifting",
+      "doing real work",
+      "doing a lot of work",
+      "doing a lot of quiet work",
+      "fair point",
+      "fair correction",
+      "that tracks",
+      "cuts both ways",
+      "pressure test",
+      "pressure-test",
+      "pull on this thread",
+      "worth flagging",
+      "one thing worth flagging",
+      "and that's on me",
+      "and that is on me",
+      "hand-wave",
+      "hand wave",
+      "handwave",
+      "now i have the full picture",
+      "now i have the complete picture",
+      "gently push back",
+      "push back gently",
+      "you're right to push back",
+      "that pain is real",
+      "that challenge is real",
+      "let me ground myself",
+      "earns its keep",
+      "earn its keep",
+      "that's the interesting part",
+      "that is the interesting part",
+      "the most honest thing",
+      "in a trench coat",
+      "cosplaying as",
+      "wearing a costume of",
+      "worth noting",
+      "crux",
+      "i hope this helps",
+      "feel free to reach out",
+      "as of my last update",
+      "great question",
+      "it's important to note",
+      "only time will tell",
+      "the key insight is"
+    ],
+    "literal": {
+      "_note": "A tier-1 phrase with an honest literal sense is spared when this regex matches the text right after it. From Bronsdon's avoid-ai-writing (2026), which flags load-bearing only before an abstract noun. Added 2026-09-27; checked on 'The beam is load-bearing for the 2nd floor'.",
+      "load-bearing": "\\s+(?:walls?|beams?|columns?|posts?|structures?|members?|capacity|elements?|partitions?|for the (?:\\d|roof|floor|ceiling))",
+      "load bearing": "\\s+(?:walls?|beams?|columns?|posts?|structures?|members?|capacity|elements?|partitions?|for the (?:\\d|roof|floor|ceiling))"
+    }
+  },
+
+  "tier2": {
+    "_note": "Real words over-reached for. per_phrase_per_1000 is the cap for any single phrase; total_per_1000 caps the whole tier. Both are hits per 1000 words of linted prose. genuinely through navigate the complexities came in on 2026-09-27 from the audit of the awesome-claude-code writing skills (docs/reviews/2026-09-27-ai-filter-vs-community-skills.md). delve and underscore moved here from shared.academic, which only reads Prove, so a Tell note saying them was never flagged. genuinely is capped, not banned: 9 uses in the author's own notes. pivotal came out the same day: 1 hit in his journal against 1 in 308,577 machine words.",
+    "per_phrase_per_1000": 2.0,
+    "total_per_1000": 8.0,
+    "phrases": [
+      "canonical",
+      "scope",
+      "shape",
+      "seam",
+      "spine",
+      "stack",
+      "register",
+      "hinge",
+      "moat",
+      "surface area",
+      "legible",
+      "quietly",
+      "quiet work",
+      "lands",
+      "landed",
+      "in-flight",
+      "dogfood",
+      "authorship",
+      "sharper",
+      "rather than",
+      "instead of",
+      "genuinely",
+      "delve",
+      "delves",
+      "delving",
+      "delved",
+      "underscore",
+      "underscores",
+      "underscored",
+      "underscoring",
+      "tapestry",
+      "testament to",
+      "multifaceted",
+      "navigate the complexities"
+    ]
+  },
+
+  "structural": {
+    "_note": "Regex hints for the two rules the 2026-07-28 miss exposed, plus the CLAUDE.md rules a regex can reach. Each is a HINT: it marks a candidate for the judgment pass, and the skill decides. Patterns are applied case-insensitively to prose lines only.",
+    "rules": [
+      {
+        "id": "reframe",
+        "label": "The reframe: denies a reading, substitutes a subtler one, adds no fact",
+        "pattern": "(?:^|(?<=[.!?]\\s))not\\s+\\w+\\.\\s+\\w|isn['\u2019]?t\\s+\\w+\\s+so much as|it['\u2019]?s not (?:that )?\\w+[,.]? (?:it['\u2019]?s|so much as)|\\b(?:don['\u2019]?t|do not|stop) call(?:ing)? it\\b[^.]{1,40}\\.\\s+call it\\b"
+      },
+      {
+        "id": "significance-tag",
+        "label": "Trailing clause asserting importance with no evidence",
+        "pattern": ", which is (?:a |the )?(?:different|quieter|real|whole|entire|interesting|important)\\b|\\band that matters\\b|\\bwhich is the (?:point|whole point)\\b|\\band that['\u2019]?s (?:the|what) (?:point|matters)\\b|\\band a (?:different|quieter|louder|bigger|smaller|stranger|sadder|worse|better|stronger) one\\b|\\bis the (?:interesting|important|real|telling|revealing|cleanest|clearest) (?:one|part|bit|thing|instance)\\b|\\b(?:that|which) is exactly what\\b|\\bin miniature\\b|, (?:highlighting|underscoring|showcasing|emphasi[sz]ing|cementing|reinforcing|signall?ing)\\b"
+      },
+      {
+        "id": "not-just-x-its-y",
+        "label": "\"This isn't just X, it's Y\"",
+        "pattern": "\\b(?:this )?(?:isn['\u2019]?t|is not|aren['\u2019]?t|wasn['\u2019]?t|weren['\u2019]?t|(?:we|you|they)['\u2019]?re not|i['\u2019]?m not) just \\w+[^.]{0,60}?,? (?:it['\u2019]?s|we['\u2019]re|you['\u2019]?re|they['\u2019]?re|i['\u2019]?m)\\b"
+      },
+      {
+        "id": "heres-what",
+        "label": "\"Here's what/the thing\" as a transition",
+        "pattern": "\\bhere['\u2019]?s (?:what|the thing|why|how it works)\\b|(?:^\\W*|(?<=[.!?]\\s))(?:it )?turns out\\b|\\bthe real story (?:is|here)\\b"
+      },
+      {
+        "id": "thats-when",
+        "label": "\"That's when/where\" as a narrative marker",
+        "pattern": "(?:^|(?<=[.!?]\\s))that['\u2019]?s (?:when|where)\\b"
+      },
+      {
+        "id": "self-question",
+        "label": "Self-questioning transition",
+        "pattern": "\\bso what does (?:this|that) mean\\b|\\bwhat does (?:this|that) actually mean\\b|\\bwhy does (?:this|that) matter\\b"
+      },
+      {
+        "id": "sitting-with-questions",
+        "label": "\"I'm sitting with these questions:\" followed by bullets",
+        "pattern": "\\b(?:i['\u2019]?m|i am) sitting with (?:these|the following)\\b"
+      },
+      {
+        "id": "apophasis",
+        "label": "Says it while claiming not to",
+        "pattern": "\\bnot to mention\\b|\\bneedless to say\\b|\\bto say nothing of\\b|\\bI won['\u2019]?t (?:even )?(?:mention|go into)\\b"
+      },
+      {
+        "id": "aposiopesis",
+        "label": "Trails off instead of saying it",
+        "pattern": "[a-z](?:\\.\\.\\.|\u2026)\\s*$"
+      },
+      {
+        "id": "litotes",
+        "label": "Affirms by denying the opposite; say the size",
+        "pattern": "\\bnot (?:uncommon|unlike|unreasonable|unimportant|unhelpful|insignificant|inconsiderable)\\b|\\bnot a small\\b|\\bnot (?:a |an )?(?:bad|nothing|trivial|minor)\\b"
+      },
+      {
+        "id": "tricolon",
+        "label": "Three verbless items for rhythm",
+        "pattern": "(?:^|[.;] )[a-z]+(?:[- ][a-z]+)?, [a-z]+(?:[- ][a-z]+)?, (?:and )?[a-z]+(?:[- ][a-z]+)?[.;]"
+      },
+      {
+        "id": "full-stop",
+        "label": "\"Full stop.\" closing a sentence for emphasis; the word as typography is fine",
+        "pattern": "(?:^\\s*|[.!?][\"'\u201d\u2019]?\\s+|\\s*[\u2014\u2013]\\s*)full stop(?:[.!]|\\s*$)"
+      },
+      {
+        "id": "attribution-flourish",
+        "label": "'As X put it': the source dressed up instead of named",
+        "pattern": "\\bas [A-Z][a-z]+ (?:put|puts|said|says) it\\b|\\bin [A-Z][a-z]+['\u2019]s (?:own )?words\\b|\\b[A-Z][a-z]+ said it (?:him|her|them)self\\b"
+      },
+      {
+        "id": "colon-label",
+        "label": "Colon hinge: the left side labels what the right side says (Roxby's Style Patch, 2026). Say it as one sentence",
+        "pattern": "(?:^\\W*|(?<=[.!?]\\s))(?:the|a|an|one|what|this|that)\\b(?:\\s+[^\\s:]+){1,5}?\\s+(?:is|are|was|were|looks|reads|stays)\\s+(?:\\w+\\s+)?\\w+:\\s+[a-z]"
+      },
+      {
+        "id": "honest-intensifier",
+        "label": "'The honest X' as an intensifier: the honest next move, reading, test. 13 in the briefs on 2026-09-27; judgment nouns only, since the author wrote 'the honest state of my relationship' in his journal",
+        "pattern": "\\bthe honest (?:next \\w+|move|answer|version|test|reading|read|headline|figure|counter|catch|call|take|framing|question|thing)\\b"
+      },
+      {
+        "id": "hedge-stack",
+        "label": "Two hedges on one claim: could potentially, may eventually (Bronsdon's avoid-ai-writing, 2026). Keep one",
+        "pattern": "\\b(?:could|might|may)\\s+(?:potentially|possibly|conceivably|perhaps|eventually)\\b|\\bpotentially\\s+(?:could|might|may)\\b"
+      }
+    ]
+  },
+
+  "rhetoric": {
+    "antithesis": "\\b\\w+(?: \\w+){0,4}, not (?:a |an |the )?\\w+(?: \\w+){0,4}[.;]"
+  },
+
+  "certainty": {
+    "_note": "Certainty words. Each is a STRUCT hint only when the sentence carrying it has no number, name, quote or source; the gate is the thin-sentence carrier test on the sentence's own span, with the word itself blanked so a sentence-initial 'Clearly' never reads as a name. From the portfolio style guide 2.3. Measured 9/7 before gating over 628 machine notes: clearly 22, proves 16, reliably 11. 'never' and 'always' are left out on purpose: 'never' appears 715 times and nearly all of it is honest.",
+    "phrases": [
+      "proves",
+      "proven",
+      "reliably",
+      "clearly",
+      "obviously",
+      "undeniably",
+      "guarantees",
+      "every time",
+      "without fail",
+      "definitively",
+      "no doubt",
+      "it is clear that",
+      "the fact is",
+      "directly translates",
+      "interestingly",
+      "surprisingly",
+      "undoubtedly",
+      "almost always"
+    ]
+  },
+
+  "coined_names": {
+    "_note": "A Title Case phrase of 2 to 4 words ending in one of `suffixes` is a STRUCT hint unless it, or its right-aligned tail, is a vault note name (read from the filenames under `vault_dirs` at run time, so the rule follows the author's folders) or is in `known` (products). `vault_dirs` is every vault folder the author authors, read recursively: the capture, project and area folders, the six 04-resources subfolders that hold notes he titles, and 05-archive. Left out on purpose: 04-resources/journal, feed, daily-execution, daily-thought-analysis, research and instruments, which hold captures and machine output rather than titles he coined. The first list was 02-projects and 03-areas only, and on 9/7 that flagged 04-resources/reference/fitness-system.md and 04-resources/reference/multipass-system.md, 7 hits each, as machine-coined names. From the guide 1.4 and 3.3: name a pattern when it is validated, never when it is exciting. 'Social System' (42 hits on 9/7) is machine-coined; 'Meta Layer System' (25) is his note.",
+    "suffixes": [
+      "System", "Framework", "Method", "Protocol", "Model", "Engine", "Playbook",
+      "Loop", "Ladder", "Pattern", "Stack", "Lens", "Machine"
+    ],
+    "known": [
+      "Better Stack",
+      "Model Context Protocol",
+      "Applicant Tracking System",
+      "Talent Protocol",
+      "Design System",
+      "Steam Machine",
+      "Pickleball Learning Machine"
+    ],
+    "vault_dirs": [
+      "01-inbox", "02-projects", "03-areas",
+      "04-resources/reference", "04-resources/how-to", "04-resources/sops",
+      "04-resources/mocs", "04-resources/thinking-tools", "04-resources/writing",
+      "05-archive"
+    ]
+  },
+
+  "density": {
+    "_note": "Non-phrase counts measured over prose only. The em-dash cap is a style limit the author chose, not a sign a machine wrote the text: Bronsdon's avoid-ai-writing corpus (2026) found em dashes in 9.9% of human documents against 1.9% of machine ones. Keep it; stop citing it as an AI tell.",
+    "em_dash_per_1000": 3.0
+  },
+
+  "shared": {
+    "_note": "Slop words, each list with the jobs it runs in. forms: stock feedback phrases from the 9/18 settings-form run. academic: the lexicon the 9/18 paper run missed. pep_talk: empty-state cheer. sell: the selling words the 9/18 deck and feature-grid runs let through, matched with -s, -ed and -ing endings, and -ly on the words ending -less, -ful or -ive (seamlessly, powerfully; never potentially). jobs is decision 13 in the 2026-09-18 spec, confirmed by the author on 9/23: sell reads Show and Persuade, academic reads Prove, forms and pep_talk read all four. Widen a jobs line to all four jobs to flip it back. On a prose or subtext row a capitalised match inside a sentence is a name and is skipped (Empower Semiconductor, Hub); at a sentence start it still counts. A heading row is left to pitch-heading, which reads sell in every job: the headings block that held its own 15 words, all of them in sell, came out on 9/19. It had 22 hits on 9/7, every one '## The leverage point' in June and July thought analyses. innovation, ai-powered, cloud-native and all-in-one came in on 9/27 from the naming skill (GlacierPhonk, 2026); platform, solutions and transformation were left out because pitch-heading reads sell in every job and '## Platforms' and '### Proposed Solution' are honest headings here.",
+    "forms": {
+      "jobs": ["show", "prove", "persuade", "reply", "tell"],
+      "words": [
+        "oops", "great news", "successfully", "something went wrong", "please try again",
+        "absolutely sure", "danger zone", "keep you in the loop", "take control",
+        "stay informed", "don't forget to"
+      ]
+    },
+    "academic": {
+      "jobs": ["prove"],
+      "words": [
+        "rapidly evolving", "landscape",
+        "harness", "harnessed", "paradigm shift", "numerous studies",
+        "it is widely", "plays a crucial role", "in today's", "taken together",
+        "meaningful engagement"
+      ]
+    },
+    "pep_talk": {
+      "jobs": ["show", "prove", "persuade", "reply", "tell"],
+      "words": [
+        "nothing here yet", "let's get started", "you're all set", "welcome to your",
+        "you'll find", "all in one place", "get started now", "we're here for you",
+        "every step of the way"
+      ]
+    },
+    "sell": {
+      "jobs": ["show", "persuade", "reply"],
+      "words": [
+        "advantage", "leverage", "unlock", "empower", "seamless", "elevate",
+        "supercharge", "holistic", "synergy", "synergies", "transformative",
+        "world-class", "best-in-class", "game-changing", "next-level",
+        "command center", "growth engine", "hub", "effortless", "transform",
+        "revenue engine", "truly cares", "growth-focused", "rockstar", "powerful",
+        "cutting-edge", "robust", "comprehensive", "innovation", "ai-powered",
+        "cloud-native", "all-in-one"
+      ]
+    }
+  },
+
+  "mention_cues": {
+    "_note": "A word in single or double quotes is a mention, and the shared lists skip it, when the quote holds two or more words (speech, a title) or when one of these sits within three words in front of a one-word quote: the word 'synergy'. A lone quoted word with no cue is a scare quote and still counts. Round 2 of the 9/18 task 7 review.",
+    "words": ["word", "term", "phrase", "called", "named", "label", "says", "said", "wrote"]
+  },
+
+  "jobs": {
+    "show": {
+      "caps": {"button": 3, "label": 4, "heading": 8, "subtext": 14},
+      "off": ["thin-sentence", "certainty", "em-dash"],
+      "vague_buttons": ["get started", "learn more", "click here", "submit", "continue"],
+      "label_pronouns": ["your", "my"],
+      "past_tense": "\\b(sent|replied|closed|booked|added|created|updated|deleted|removed|saved|failed|grew|reached|delivered|generated|achieved|increased|decreased|opened|paid|joined|left|signed|was|were|had|did)\\b"
+    },
+    "prove": {
+      "off": ["thin-sentence"],
+      "claim": "\\b(studies|research|researchers|evidence|literature|scholars|experts|critics|observers|analysts|commentators)\\b[^.,;]{0,60}\\b(show|shows|shown|suggest|suggests|found|indicate|indicates|agree|confirm|demonstrate|say|argue|argues|noted|believe)\\b|\\bit is (?:clear|known|evident|widely)\\b",
+      "citation": "(?!(?:Research|Researchers|Studies|Evidence|Literature|Scholars|Experts)\\b)[A-Z][a-z]+(?:,? (?:and |& )?[A-Z][a-z]+)*(?: et al\\.?)? \\((?:19|20)\\d\\d\\)|\\((?!(?:Research|Researchers|Studies|Evidence|Literature|Scholars|Experts)\\b)[A-Z][a-z]+(?:,? (?:and |& )?[A-Z][a-z]+)*(?: et al\\.?)?,? (?:19|20)\\d\\d\\)",
+      "reference_back": "^(?:[A-Za-z]+(?: [A-Za-z]+)?,\\s+)?(?:(?:all|each) of\\s+)?(?:the|these|those|both|all)\\s+(?:\\w+\\s+){0,2}(?:studies|reviews|papers|authors|surveys|trials|sources|reports)\\b"
+    },
+    "persuade": {
+      "off": ["thin-sentence", "closing-beat"],
+      "max_words": 50,
+      "you_per_we": 2
+    },
+    "reply": {
+      "carrier": "a reply to a prospect",
+      "off": ["thin-sentence", "closing-beat"]
+    },
+    "tell": {
+      "off": [],
+      "connectives": [
+        "after", "then", "so", "because", "when", "since", "regarding", "which means",
+        "asked", "said", "confirmed", "mentioned", "before", "until", "once", "but",
+        "if", "while", "and then"
+      ]
+    }
+  },
+
+  "banned_devices": [
+    "antithesis", "chiasmus", "epigram", "isocolon", "fragment list", "closing beat",
+    "metaphor as argument", "asyndeton", "zeugma", "alliteration", "aposiopesis", "apophasis",
+    "the reframe", "the significance tag", "the pivot", "prolepsis", "concession", "callback",
+    "litotes", "tricolon", "attribution as a flourish"
+  ]
+}

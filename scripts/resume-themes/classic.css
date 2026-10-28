@@ -1,0 +1,10 @@
+/* Classic: serif, black ink, centered header. For conservative employers and BPO recruiters. */
+:root { --ink: #111; --body: #222; --muted: #555; --rule: #111; --accent: #111; }
+body { font-family: Georgia, "Times New Roman", serif; font-size: 8.8pt; line-height: 1.26; }
+:root { --gap-section: 10.5pt; --gap-role: 7pt; }
+h1 { text-align: center; font-size: 19pt; font-weight: 700; letter-spacing: 0.02em; }
+h1 + p { text-align: center; color: var(--body); border-bottom: 0.6pt solid var(--rule); }
+h2 { font-size: 9pt; letter-spacing: 0.06em; color: var(--ink); border-bottom: 0.6pt solid var(--rule); }
+.role-title { font-size: 9.6pt; }
+.role-dates { font-style: italic; color: var(--body); }
+li::marker { color: var(--ink); }

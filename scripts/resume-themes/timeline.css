@@ -1,0 +1,20 @@
+/* Timeline: Avenir Next, indigo accent, a vertical line with a dot per role, date pills, tool chips.
+   Decoration only: the line and dots are borders and empty pseudo-elements, so no text moves. */
+:root { --ink: #111827; --body: #374151; --muted: #6b7280; --rule: #e5e7eb; --accent: #4f46e5;
+        --tint: #eef2ff; --gap-role: 0pt; }
+body { font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 8.3pt; line-height: 1.26; }
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+h1 { font-family: "Avenir Next", "Helvetica Neue", sans-serif; font-size: 25pt; font-weight: 800; letter-spacing: -0.03em; }
+h1 + p { border-bottom: none; padding-bottom: 0; color: var(--accent); font-weight: 500; }
+h2 { color: var(--accent); font-size: 8pt; letter-spacing: 0.06em; border-bottom: 0.6pt solid var(--rule); }
+.role, .role + p, .role + p + ul { border-left: 1.6pt solid #a5b4fc; margin-left: 3pt; padding-left: 11pt; }
+.role { position: relative; padding-top: 5pt; margin-top: 0; }
+.role::before { content: ""; position: absolute; left: -4.6pt; top: 7.4pt; width: 7.8pt; height: 7.8pt;
+                border-radius: 50%; background: var(--accent); border: 1.6pt solid #fff; box-sizing: border-box; }
+.role + p + ul { padding-left: 22pt; padding-bottom: 2pt; margin-top: 0; }
+.role-sep { display: none; }
+.role-dates { background: var(--tint); color: var(--accent); font-weight: 600; font-size: 7.6pt;
+              border-radius: 8pt; padding: 0.6pt 6pt; margin-left: 5pt; }
+li::marker { color: var(--accent); }
+h2:last-of-type + ul { padding-left: 0; list-style: none; }
+h2:last-of-type + ul li strong { background: var(--tint); color: var(--accent); border-radius: 4pt; padding: 0.4pt 4pt; }

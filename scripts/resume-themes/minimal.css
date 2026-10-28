@@ -1,0 +1,9 @@
+/* Minimal: black and grey only, hairlines, more air. Safest for strict parsers and printing. */
+:root { --ink: #000; --body: #262626; --muted: #6b6b6b; --rule: #bdbdbd; --accent: #000;
+        --gap-section: 10pt; --head-rule: 0.5pt; }
+body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 8.6pt; line-height: 1.24; }
+h1 { font-size: 18pt; font-weight: 600; letter-spacing: 0; }
+h1 + p { border-bottom: 0.5pt solid var(--rule); }
+h2 { font-size: 8.6pt; font-weight: 600; letter-spacing: 0.04em; border-bottom: 0.5pt solid var(--rule); }
+.role-title { font-weight: 600; }
+.role + p em, p > em:only-child { color: var(--muted); font-style: normal; }
